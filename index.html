@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,7 +20,6 @@
   }
  
   *{ margin:0; padding:0; box-sizing:border-box; }
- 
   html{ scroll-behavior:smooth; }
  
   body{
@@ -36,7 +34,119 @@
     *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; }
   }
  
-  /* ---------- Ambient background ---------- */
+  /* ================= ENVELOPE ================= */
+  #envelope-screen{
+    position:fixed; inset:0;
+    z-index:100;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:
+      radial-gradient(ellipse 70% 55% at 50% 40%, rgba(176,74,99,0.35), transparent 65%),
+      linear-gradient(160deg, #611830 0%, var(--burgundy) 35%, var(--burgundy-deep) 70%, #200712 100%);
+    cursor:pointer;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+  }
+ 
+  #envelope-screen.hidden{
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+  }
+ 
+  .envelope-wrap{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap: 1.6rem;
+  }
+ 
+  .envelope{
+    position:relative;
+    width: min(70vw, 260px);
+    height: min(50vw, 180px);
+    animation: envelope-float 3.5s ease-in-out infinite;
+  }
+ 
+  @keyframes envelope-float{
+    0%,100%{ transform: translateY(0); }
+    50%{ transform: translateY(-10px); }
+  }
+ 
+  .envelope-body{
+    position:absolute; inset:0;
+    background: linear-gradient(160deg, #fdf3ee, var(--blush));
+    border-radius: 4px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.45);
+  }
+ 
+  .envelope-flap{
+    position:absolute;
+    top:0; left:0; right:0;
+    height:60%;
+    background: linear-gradient(160deg, var(--rose), var(--burgundy));
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    transform-origin: top;
+    transition: transform 0.9s cubic-bezier(.6,0,.3,1);
+    z-index:3;
+  }
+ 
+  .envelope-seal{
+    position:absolute;
+    top:38%; left:50%;
+    transform:translate(-50%,-50%);
+    width:46px; height:46px;
+    border-radius:50%;
+    background: radial-gradient(circle at 35% 30%, var(--gold-soft), var(--gold) 70%);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-weight:600;
+    font-size:1.1rem;
+    color: var(--burgundy-deep);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.35);
+    z-index:4;
+    transition: opacity 0.4s ease 0.2s, transform 0.4s ease 0.2s;
+  }
+ 
+  .envelope-card{
+    position:absolute;
+    left:8%; right:8%;
+    bottom:6%;
+    height:70%;
+    background: var(--ivory);
+    border-radius: 3px;
+    box-shadow: 0 -4px 14px rgba(0,0,0,0.15);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    color: var(--burgundy);
+    font-size: 0.95rem;
+    text-align:center;
+    padding: 0.6rem;
+    transform: translateY(0);
+    transition: transform 0.9s cubic-bezier(.6,0,.3,1) 0.15s;
+    z-index:1;
+  }
+ 
+  #envelope-screen.opening .envelope-flap{ transform: rotateX(180deg); }
+  #envelope-screen.opening .envelope-seal{ opacity:0; transform:translate(-50%,-50%) scale(0.4); }
+  #envelope-screen.opening .envelope-card{ transform: translateY(-130%); }
+ 
+  .envelope-hint{
+    font-size: 0.68rem;
+    letter-spacing:0.32em;
+    text-transform:uppercase;
+    color: var(--gold-soft);
+    opacity:0.85;
+    animation: hint-pulse 2.2s ease-in-out infinite;
+  }
+ 
+  @keyframes hint-pulse{ 0%,100%{ opacity:0.5; } 50%{ opacity:1; } }
+ 
+  /* ================= MAIN SCENE ================= */
   .scene{
     position:relative;
     min-height:100vh;
@@ -97,12 +207,7 @@
     50%{ opacity:1; transform:translate(-50%,-50%) scale(1.08); }
   }
  
-  .petals{
-    position:absolute; inset:0;
-    overflow:hidden;
-    pointer-events:none;
-    z-index:0;
-  }
+  .petals{ position:absolute; inset:0; overflow:hidden; pointer-events:none; z-index:0; }
  
   .petal{
     position:absolute;
@@ -113,7 +218,6 @@
     opacity:0.55;
     animation: float-up linear infinite;
   }
- 
   .petal.gold{ background: linear-gradient(135deg, var(--gold-soft), var(--gold)); }
  
   @keyframes float-up{
@@ -124,12 +228,8 @@
     100%{ transform: translateY(-104vh) translateX(-14px) rotate(360deg); opacity:0; }
   }
  
-  .scene > *:not(.petals):not(.glow){
-    position:relative;
-    z-index:1;
-  }
+  .scene > *:not(.petals):not(.glow){ position:relative; z-index:1; }
  
-  /* ---------- Frame border ---------- */
   .frame{
     position:fixed; inset:14px;
     border:1px solid rgba(201,161,90,0.35);
@@ -146,9 +246,7 @@
   .corner-tl{ top:-1px; left:-1px; border-width:2px 0 0 2px; }
   .corner-br{ bottom:-1px; right:-1px; border-width:0 2px 2px 0; }
  
-  /* ---------- Eyebrow ---------- */
   .eyebrow{
-    font-family:'Jost', sans-serif;
     font-weight:400;
     font-size: 0.72rem;
     letter-spacing: 0.42em;
@@ -159,7 +257,6 @@
     animation: rise 1s ease forwards 0.15s;
   }
  
-  /* ---------- Monogram ---------- */
   .monogram-wrap{
     display:flex;
     align-items:center;
@@ -216,13 +313,36 @@
     line-height:1.35;
     max-width: 32ch;
     color: var(--ivory);
-    margin-bottom: 3.4rem;
+    margin-bottom: 2.6rem;
     opacity:0;
     animation: rise 1.1s ease forwards 0.85s;
   }
   .headline em{ font-style:italic; color: var(--gold-soft); }
  
-  /* ---------- Countdown ---------- */
+  /* ---------- Ring decoration ---------- */
+  .ring-decor{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width: 58px;
+    height: 58px;
+    margin-bottom: 2.2rem;
+    cursor:pointer;
+    opacity:0;
+    animation: rise 1.1s ease forwards 0.95s, ring-float 6s ease-in-out infinite 1.6s;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+  }
+  .ring-decor:hover, .ring-decor:focus-visible{
+    transform: scale(1.1);
+    outline:none;
+  }
+  .ring-decor svg{ width:100%; height:100%; display:block; }
+ 
+  @keyframes ring-float{
+    0%,100%{ transform: translateY(0) rotate(-4deg); }
+    50%{ transform: translateY(-6px) rotate(4deg); }
+  }
+ 
   .countdown{
     display:flex;
     gap: clamp(0.6rem, 3vw, 2.2rem);
@@ -233,12 +353,7 @@
     animation: rise 1.1s ease forwards 1.05s;
   }
  
-  .unit{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    min-width: 4.4rem;
-  }
+  .unit{ display:flex; flex-direction:column; align-items:center; min-width: 4.4rem; }
  
   .unit-value{
     font-family:'Cormorant Garamond', serif;
@@ -280,7 +395,6 @@
     align-self:flex-start;
   }
  
-  /* ---------- Date line ---------- */
   .date-line{
     display:flex;
     align-items:center;
@@ -290,10 +404,7 @@
     animation: rise 1.1s ease forwards 1.25s;
   }
  
-  .date-line .dash{
-    width:34px; height:1px;
-    background: rgba(201,161,90,0.5);
-  }
+  .date-line .dash{ width:34px; height:1px; background: rgba(201,161,90,0.5); }
  
   .date-text{
     font-size: 0.78rem;
@@ -309,14 +420,11 @@
     font-size: 1.05rem;
     color: var(--blush);
     opacity: 0.85;
+    margin-bottom: 3rem;
   }
  
-  @keyframes rise{
-    from{ opacity:0; transform: translateY(16px); }
-    to{ opacity:1; transform: translateY(0); }
-  }
+  @keyframes rise{ from{ opacity:0; transform: translateY(16px); } to{ opacity:1; transform: translateY(0); } }
  
-  /* Arrived state */
   .arrived{
     display:none;
     font-family:'Cormorant Garamond', serif;
@@ -324,6 +432,44 @@
     font-size: clamp(1.6rem, 4vw, 2.4rem);
     color: var(--gold);
   }
+ 
+  /* ================= ACTION BUTTONS ================= */
+  .actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap: 0.9rem;
+    justify-content:center;
+    opacity:0;
+    animation: rise 1.1s ease forwards 1.45s;
+  }
+ 
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:0.5rem;
+    padding: 0.85rem 1.5rem;
+    border-radius: 999px;
+    text-decoration:none;
+    font-family:'Jost', sans-serif;
+    font-size: 0.78rem;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+    border: 1px solid rgba(201,161,90,0.5);
+    cursor:pointer;
+    white-space:nowrap;
+  }
+ 
+  .btn svg{ width:15px; height:15px; flex-shrink:0; }
+ 
+  .btn-primary{
+    background: linear-gradient(135deg, var(--gold-soft), var(--gold));
+    color: var(--burgundy-deep);
+    border-color: transparent;
+  }
+ 
+  .btn:hover{ transform: translateY(-2px); box-shadow: 0 10px 24px rgba(0,0,0,0.35); }
+  .btn-primary:hover{ background: linear-gradient(135deg, var(--gold), var(--gold-soft)); }
  
   footer{
     position:relative;
@@ -340,14 +486,227 @@
     .countdown{ gap: 0.5rem; }
     .unit{ min-width: 3.6rem; }
     .colon{ padding-top: 0.1rem; }
+    .btn{ font-size: 0.7rem; padding: 0.75rem 1.2rem; }
+  }
+ 
+  /* ================= COLLECTIBLE STARS ================= */
+  .star{
+    position:fixed;
+    background:none;
+    border:none;
+    padding: 11px;
+    margin:0;
+    font-size: 13px;
+    line-height:1;
+    color: rgba(227,202,160,0.5);
+    cursor:pointer;
+    z-index:40;
+    opacity:0.55;
+    filter: drop-shadow(0 0 3px rgba(227,202,160,0.35));
+    animation: star-twinkle 4.5s ease-in-out infinite;
+    transition: color 0.3s ease, transform 0.3s ease, opacity 0.3s ease;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+ 
+  .star:hover, .star:focus-visible{
+    color: var(--gold-soft);
+    opacity:1;
+    transform: scale(1.35);
+    outline:none;
+  }
+ 
+  @keyframes star-twinkle{
+    0%,100%{ opacity:0.3; transform:scale(1); }
+    50%{ opacity:0.7; transform:scale(1.15); }
+  }
+ 
+  .star.collected{
+    pointer-events:none;
+    animation: star-collected 0.6s ease forwards;
+  }
+ 
+  @keyframes star-collected{
+    to{ opacity:0; transform: scale(2.2); }
+  }
+ 
+  .particle{
+    position:fixed;
+    width:4px; height:4px;
+    border-radius:50%;
+    background: var(--gold-soft);
+    pointer-events:none;
+    z-index:41;
+    animation: particle-burst 0.75s ease-out forwards;
+  }
+ 
+  @keyframes particle-burst{
+    to{ transform: translate(var(--dx), var(--dy)) scale(0); opacity:0; }
+  }
+ 
+  /* ================= STARS FOUND OVERLAY ================= */
+  #stars-overlay{
+    position:fixed; inset:0;
+    z-index:90;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding: 6vw;
+    background: rgba(20,5,12,0.55);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    opacity:0;
+    visibility:hidden;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+  }
+ 
+  #stars-overlay.visible{ opacity:1; visibility:visible; }
+ 
+  .stars-card{
+    max-width: 420px;
+    text-align:center;
+    padding: 3rem 2.2rem;
+    border-radius: 4px;
+    background: rgba(74,18,38,0.35);
+    border: 1px solid rgba(201,161,90,0.4);
+    box-shadow: 0 30px 70px rgba(0,0,0,0.5);
+    transform: translateY(14px) scale(0.97);
+    opacity:0;
+    transition: transform 0.6s ease 0.1s, opacity 0.6s ease 0.1s;
+  }
+ 
+  #stars-overlay.visible .stars-card{ transform: translateY(0) scale(1); opacity:1; }
+ 
+  .stars-card h2{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:500;
+    font-style:italic;
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    color: var(--gold-soft);
+    margin-bottom: 0.9rem;
+    line-height:1.35;
+  }
+ 
+  .stars-card p{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size: 1.05rem;
+    color: var(--blush);
+    opacity:0.85;
+    margin-bottom: 2rem;
+  }
+ 
+  .stars-card .btn{ margin:0 auto; }
+ 
+  /* ================= RING OVERLAY ================= */
+  #ring-overlay{
+    position:fixed; inset:0;
+    z-index:80;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background: rgba(20,5,12,0.4);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    opacity:0;
+    visibility:hidden;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+    cursor:pointer;
+  }
+ 
+  #ring-overlay.visible{ opacity:1; visibility:visible; }
+ 
+  .ring-hero{
+    position:relative;
+    width:150px; height:150px;
+    display:flex; align-items:center; justify-content:center;
+  }
+ 
+  .ring-hero::before{
+    content:"";
+    position:absolute; inset:-34px;
+    border-radius:50%;
+    background: radial-gradient(circle, rgba(226,158,178,0.45), rgba(201,161,90,0.16) 55%, transparent 76%);
+    filter: blur(3px);
+    animation: ring-glow-pulse 1.7s ease-in-out infinite;
+  }
+ 
+  @keyframes ring-glow-pulse{
+    0%,100%{ transform:scale(0.88); opacity:0.65; }
+    50%{ transform:scale(1.15); opacity:1; }
+  }
+ 
+  .ring-hero svg{
+    position:relative; z-index:1;
+    width:100%; height:100%;
+  }
+ 
+  #ring-overlay.visible .ring-hero svg{
+    animation: ring-spin 1.9s cubic-bezier(.5,0,.2,1);
+  }
+ 
+  @keyframes ring-spin{
+    0%{ transform: scale(0.35) rotate(0deg); opacity:0; }
+    28%{ opacity:1; }
+    100%{ transform: scale(1) rotate(720deg); opacity:1; }
   }
 </style>
 </head>
 <body>
  
+<!-- ================= ENVELOPE INTRO ================= -->
+<div id="envelope-screen">
+  <div class="envelope-wrap">
+    <div class="envelope" id="envelope">
+      <div class="envelope-card">Tap to open<br>our invitation</div>
+      <div class="envelope-body"></div>
+      <div class="envelope-flap"></div>
+      <div class="envelope-seal">A&amp;N</div>
+    </div>
+    <div class="envelope-hint">Tap the envelope</div>
+  </div>
+</div>
+ 
 <div class="frame">
   <div class="corner-tl"></div>
   <div class="corner-br"></div>
+</div>
+ 
+<!-- ================= COLLECTIBLE STARS ================= -->
+<button class="star" style="top:9%; left:7%;" aria-label="A little star">&#10022;</button>
+<button class="star" style="top:16%; right:8%;" aria-label="A little star">&#10022;</button>
+<button class="star" style="top:46%; left:5%;" aria-label="A little star">&#10022;</button>
+<button class="star" style="top:52%; right:6%;" aria-label="A little star">&#10022;</button>
+<button class="star" style="bottom:16%; left:11%;" aria-label="A little star">&#10022;</button>
+<button class="star" style="bottom:9%; right:13%;" aria-label="A little star">&#10022;</button>
+ 
+<!-- ================= RING OVERLAY ================= -->
+<div id="ring-overlay">
+  <div class="ring-hero">
+    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="32" cy="38" r="16" fill="none" stroke="url(#ringGradHero)" stroke-width="4"/>
+      <polygon points="32,10 40,20 32,30 24,20" fill="url(#gemGradHero)" stroke="rgba(253,248,244,0.6)" stroke-width="0.6"/>
+      <defs>
+        <linearGradient id="ringGradHero" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#e3caa0"/>
+          <stop offset="100%" stop-color="#c9a15a"/>
+        </linearGradient>
+        <linearGradient id="gemGradHero" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#f2d7dd"/>
+          <stop offset="100%" stop-color="#b04a63"/>
+        </linearGradient>
+      </defs>
+    </svg>
+  </div>
+</div>
+ 
+<!-- ================= STARS FOUND OVERLAY ================= -->
+<div id="stars-overlay">
+  <div class="stars-card">
+    <h2>You found all our little stars.</h2>
+    <p>Some things are meant to be discovered. &#9825;</p>
+    <button class="btn btn-primary" id="stars-continue">Continue</button>
+  </div>
 </div>
  
 <div class="scene">
@@ -367,6 +726,23 @@
   <div class="rule"></div>
  
   <p class="headline">Two hearts, one promise —<br>this is where we <em>begin our forever</em>.</p>
+ 
+  <div class="ring-decor" id="ring-decor" role="button" tabindex="0" aria-label="A little something for later">
+    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="32" cy="38" r="16" fill="none" stroke="url(#ringGrad)" stroke-width="4"/>
+      <polygon points="32,10 40,20 32,30 24,20" fill="url(#gemGrad)" stroke="rgba(253,248,244,0.6)" stroke-width="0.6"/>
+      <defs>
+        <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#e3caa0"/>
+          <stop offset="100%" stop-color="#c9a15a"/>
+        </linearGradient>
+        <linearGradient id="gemGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#f2d7dd"/>
+          <stop offset="100%" stop-color="#b04a63"/>
+        </linearGradient>
+      </defs>
+    </svg>
+  </div>
  
   <div id="countdown-active">
     <div class="countdown" id="countdown">
@@ -388,14 +764,37 @@
     <span class="dash"></span>
   </div>
   <p class="sub-date">A love that found its way home — come celebrate it with us</p>
+ 
+  <div class="actions">
+    <a href="https://maps.app.goo.gl/DmN8zyVx5pWBJLag8" id="location-btn" class="btn btn-primary" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      Laylti Hall
+    </a>
+  </div>
 </div>
  
 <footer>A &amp; N &nbsp;·&nbsp; Engagement</footer>
  
 <script>
   (function(){
-    var target = new Date(2026, 10, 5, 18, 0, 0).getTime(); // Nov 5, 2026, 6:00 PM
+    // ---------- Config ----------
+    var EVENT_START = new Date(2026, 10, 5, 18, 0, 0); // Nov 5, 2026, 6:00 PM
  
+    // ---------- Envelope open ----------
+    var envelopeScreen = document.getElementById('envelope-screen');
+    var envelope = document.getElementById('envelope');
+ 
+    function openEnvelope(){
+      envelopeScreen.classList.add('opening');
+      setTimeout(function(){
+        envelopeScreen.classList.add('hidden');
+      }, 900);
+    }
+    envelope.addEventListener('click', openEnvelope);
+    envelopeScreen.addEventListener('click', openEnvelope);
+ 
+    // ---------- Countdown ----------
+    var target = EVENT_START.getTime();
     var daysEl = document.getElementById('days');
     var hoursEl = document.getElementById('hours');
     var minutesEl = document.getElementById('minutes');
@@ -430,7 +829,7 @@
     tick();
     var interval = setInterval(tick, 1000);
  
-    // Gently floating petals for a softer, more romantic backdrop
+    // ---------- Petals ----------
     var petalContainer = document.getElementById('petals');
     var petalCount = 14;
     for(var i = 0; i < petalCount; i++){
@@ -446,6 +845,88 @@
       petal.style.transform = 'scale(' + scale + ')';
       petalContainer.appendChild(petal);
     }
+ 
+    // ================= COLLECTIBLE STARS =================
+    var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var stars = Array.prototype.slice.call(document.querySelectorAll('.star'));
+    var totalStars = stars.length;
+    var collectedCount = 0;
+    var starsOverlay = document.getElementById('stars-overlay');
+    var starsContinue = document.getElementById('stars-continue');
+ 
+    function spawnParticles(x, y){
+      if(reduceMotion) return;
+      var count = 7;
+      for(var p = 0; p < count; p++){
+        var particle = document.createElement('div');
+        particle.className = 'particle';
+        var angle = (Math.PI * 2 * p) / count + Math.random() * 0.4;
+        var distance = 26 + Math.random() * 18;
+        var dx = Math.cos(angle) * distance;
+        var dy = Math.sin(angle) * distance;
+        particle.style.left = x + 'px';
+        particle.style.top = y + 'px';
+        particle.style.setProperty('--dx', dx + 'px');
+        particle.style.setProperty('--dy', dy + 'px');
+        document.body.appendChild(particle);
+        (function(el){
+          setTimeout(function(){ if(el.parentNode) el.parentNode.removeChild(el); }, 800);
+        })(particle);
+      }
+    }
+ 
+    stars.forEach(function(star){
+      star.addEventListener('click', function(){
+        if(star.classList.contains('collected')) return;
+        var rect = star.getBoundingClientRect();
+        var cx = rect.left + rect.width / 2;
+        var cy = rect.top + rect.height / 2;
+        spawnParticles(cx, cy);
+        star.classList.add('collected');
+        collectedCount++;
+        if(collectedCount === totalStars){
+          setTimeout(function(){
+            starsOverlay.classList.add('visible');
+          }, 500);
+        }
+      });
+    });
+ 
+    starsContinue.addEventListener('click', function(){
+      starsOverlay.classList.remove('visible');
+    });
+    starsOverlay.addEventListener('click', function(e){
+      if(e.target === starsOverlay){
+        starsOverlay.classList.remove('visible');
+      }
+    });
+ 
+    // ================= INTERACTIVE RING =================
+    var ringDecor = document.getElementById('ring-decor');
+    var ringOverlay = document.getElementById('ring-overlay');
+    var ringAutoHide;
+ 
+    function triggerRing(){
+      ringOverlay.classList.add('visible');
+      var rect = ringOverlay.getBoundingClientRect();
+      spawnParticles(rect.left + rect.width / 2, rect.top + rect.height / 2 - 40);
+      clearTimeout(ringAutoHide);
+      ringAutoHide = setTimeout(function(){
+        ringOverlay.classList.remove('visible');
+      }, reduceMotion ? 1200 : 2600);
+    }
+ 
+    ringDecor.addEventListener('click', triggerRing);
+    ringDecor.addEventListener('keydown', function(e){
+      if(e.key === 'Enter' || e.key === ' '){
+        e.preventDefault();
+        triggerRing();
+      }
+    });
+    ringOverlay.addEventListener('click', function(){
+      clearTimeout(ringAutoHide);
+      ringOverlay.classList.remove('visible');
+    });
   })();
 </script>
  
