@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,11 +19,11 @@
     --gold-soft: #e3caa0;
     --ivory: #fdf8f4;
   }
-
+ 
   *{ margin:0; padding:0; box-sizing:border-box; }
-
+ 
   html{ scroll-behavior:smooth; }
-
+ 
   body{
     font-family:'Jost', sans-serif;
     background: var(--burgundy-deep);
@@ -30,11 +31,11 @@
     overflow-x:hidden;
     -webkit-font-smoothing:antialiased;
   }
-
+ 
   @media (prefers-reduced-motion: reduce){
     *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; }
   }
-
+ 
   /* ---------- Ambient background ---------- */
   .scene{
     position:relative;
@@ -55,12 +56,12 @@
     text-align:center;
     isolation:isolate;
   }
-
+ 
   @keyframes drift{
     0%{ background-position: 0% 0%, 100% 0%, 50% 100%, 50% 40%, 0% 0%; }
     100%{ background-position: 10% 10%, 90% 15%, 45% 100%, 55% 55%, 0% 0%; }
   }
-
+ 
   .scene::before{
     content:"";
     position:absolute; inset:0;
@@ -77,7 +78,7 @@
     opacity:0.85;
     z-index:0;
   }
-
+ 
   .glow{
     position:absolute;
     top:50%; left:50%;
@@ -90,19 +91,19 @@
     pointer-events:none;
     z-index:0;
   }
-
+ 
   @keyframes pulse-glow{
     0%,100%{ opacity:0.7; transform:translate(-50%,-50%) scale(1); }
     50%{ opacity:1; transform:translate(-50%,-50%) scale(1.08); }
   }
-
+ 
   .petals{
     position:absolute; inset:0;
     overflow:hidden;
     pointer-events:none;
     z-index:0;
   }
-
+ 
   .petal{
     position:absolute;
     bottom:-40px;
@@ -112,9 +113,9 @@
     opacity:0.55;
     animation: float-up linear infinite;
   }
-
+ 
   .petal.gold{ background: linear-gradient(135deg, var(--gold-soft), var(--gold)); }
-
+ 
   @keyframes float-up{
     0%{ transform: translateY(0) translateX(0) rotate(0deg); opacity:0; }
     10%{ opacity:0.6; }
@@ -122,12 +123,12 @@
     90%{ opacity:0.5; }
     100%{ transform: translateY(-104vh) translateX(-14px) rotate(360deg); opacity:0; }
   }
-
+ 
   .scene > *:not(.petals):not(.glow){
     position:relative;
     z-index:1;
   }
-
+ 
   /* ---------- Frame border ---------- */
   .frame{
     position:fixed; inset:14px;
@@ -144,7 +145,7 @@
   }
   .corner-tl{ top:-1px; left:-1px; border-width:2px 0 0 2px; }
   .corner-br{ bottom:-1px; right:-1px; border-width:0 2px 2px 0; }
-
+ 
   /* ---------- Eyebrow ---------- */
   .eyebrow{
     font-family:'Jost', sans-serif;
@@ -157,7 +158,7 @@
     opacity:0;
     animation: rise 1s ease forwards 0.15s;
   }
-
+ 
   /* ---------- Monogram ---------- */
   .monogram-wrap{
     display:flex;
@@ -168,7 +169,7 @@
     opacity:0;
     animation: rise 1.1s ease forwards 0.35s;
   }
-
+ 
   .initial{
     font-family:'Cormorant Garamond', serif;
     font-weight:500;
@@ -177,7 +178,7 @@
     color: var(--ivory);
     position:relative;
   }
-
+ 
   .ampersand{
     font-family:'Cormorant Garamond', serif;
     font-style:italic;
@@ -186,7 +187,7 @@
     color: var(--gold);
     transform: translateY(-6px);
   }
-
+ 
   .names{
     font-family:'Cormorant Garamond', serif;
     font-weight:400;
@@ -198,7 +199,7 @@
     opacity:0;
     animation: rise 1.1s ease forwards 0.55s;
   }
-
+ 
   .rule{
     width:1px;
     height:44px;
@@ -207,7 +208,7 @@
     opacity:0;
     animation: rise 1s ease forwards 0.7s;
   }
-
+ 
   .headline{
     font-family:'Cormorant Garamond', serif;
     font-weight:400;
@@ -220,7 +221,7 @@
     animation: rise 1.1s ease forwards 0.85s;
   }
   .headline em{ font-style:italic; color: var(--gold-soft); }
-
+ 
   /* ---------- Countdown ---------- */
   .countdown{
     display:flex;
@@ -231,14 +232,14 @@
     opacity:0;
     animation: rise 1.1s ease forwards 1.05s;
   }
-
+ 
   .unit{
     display:flex;
     flex-direction:column;
     align-items:center;
     min-width: 4.4rem;
   }
-
+ 
   .unit-value{
     font-family:'Cormorant Garamond', serif;
     font-weight:600;
@@ -249,7 +250,7 @@
     position:relative;
     padding-bottom: 0.6rem;
   }
-
+ 
   .unit-value::after{
     content:"";
     position:absolute;
@@ -259,7 +260,7 @@
     background: var(--gold);
     opacity:0.6;
   }
-
+ 
   .unit-label{
     margin-top: 0.9rem;
     font-size: 0.62rem;
@@ -268,7 +269,7 @@
     color: var(--blush);
     opacity:0.75;
   }
-
+ 
   .colon{
     font-family:'Cormorant Garamond', serif;
     font-weight:300;
@@ -278,7 +279,7 @@
     padding-top: 0.2rem;
     align-self:flex-start;
   }
-
+ 
   /* ---------- Date line ---------- */
   .date-line{
     display:flex;
@@ -288,19 +289,19 @@
     opacity:0;
     animation: rise 1.1s ease forwards 1.25s;
   }
-
+ 
   .date-line .dash{
     width:34px; height:1px;
     background: rgba(201,161,90,0.5);
   }
-
+ 
   .date-text{
     font-size: 0.78rem;
     letter-spacing:0.2em;
     text-transform:uppercase;
     color: var(--gold-soft);
   }
-
+ 
   .sub-date{
     margin-top: 0.8rem;
     font-family:'Cormorant Garamond', serif;
@@ -309,12 +310,12 @@
     color: var(--blush);
     opacity: 0.85;
   }
-
+ 
   @keyframes rise{
     from{ opacity:0; transform: translateY(16px); }
     to{ opacity:1; transform: translateY(0); }
   }
-
+ 
   /* Arrived state */
   .arrived{
     display:none;
@@ -323,7 +324,7 @@
     font-size: clamp(1.6rem, 4vw, 2.4rem);
     color: var(--gold);
   }
-
+ 
   footer{
     position:relative;
     text-align:center;
@@ -334,7 +335,7 @@
     color: rgba(242,215,221,0.45);
     background: var(--burgundy-deep);
   }
-
+ 
   @media (max-width: 480px){
     .countdown{ gap: 0.5rem; }
     .unit{ min-width: 3.6rem; }
@@ -343,30 +344,30 @@
 </style>
 </head>
 <body>
-
+ 
 <div class="frame">
   <div class="corner-tl"></div>
   <div class="corner-br"></div>
 </div>
-
+ 
 <div class="scene">
   <div class="glow"></div>
   <div class="petals" id="petals"></div>
-
+ 
   <div class="eyebrow">Together with their families</div>
-
+ 
   <div class="monogram-wrap">
     <span class="initial">A</span>
     <span class="ampersand">&amp;</span>
     <span class="initial">N</span>
   </div>
-
+ 
   <p class="names">Abdelrhman &nbsp;&middot;&nbsp; Nareman</p>
-
+ 
   <div class="rule"></div>
-
+ 
   <p class="headline">Two hearts, one promise —<br>this is where we <em>begin our forever</em>.</p>
-
+ 
   <div id="countdown-active">
     <div class="countdown" id="countdown">
       <div class="unit"><div class="unit-value" id="days">00</div><div class="unit-label">Days</div></div>
@@ -378,9 +379,9 @@
       <div class="unit"><div class="unit-value" id="seconds">00</div><div class="unit-label">Seconds</div></div>
     </div>
   </div>
-
+ 
   <p class="arrived" id="arrived-message">Today, our story continues.</p>
-
+ 
   <div class="date-line">
     <span class="dash"></span>
     <span class="date-text">5th of November</span>
@@ -388,47 +389,47 @@
   </div>
   <p class="sub-date">A love that found its way home — come celebrate it with us</p>
 </div>
-
+ 
 <footer>A &amp; N &nbsp;·&nbsp; Engagement</footer>
-
+ 
 <script>
   (function(){
     var target = new Date(2026, 10, 5, 18, 0, 0).getTime(); // Nov 5, 2026, 6:00 PM
-
+ 
     var daysEl = document.getElementById('days');
     var hoursEl = document.getElementById('hours');
     var minutesEl = document.getElementById('minutes');
     var secondsEl = document.getElementById('seconds');
     var activeWrap = document.getElementById('countdown-active');
     var arrivedMsg = document.getElementById('arrived-message');
-
+ 
     function pad(n){ return String(n).padStart(2, '0'); }
-
+ 
     function tick(){
       var now = new Date().getTime();
       var diff = target - now;
-
+ 
       if(diff <= 0){
         activeWrap.style.display = 'none';
         arrivedMsg.style.display = 'block';
         clearInterval(interval);
         return;
       }
-
+ 
       var days = Math.floor(diff / (1000 * 60 * 60 * 24));
       var hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       var minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
       var seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
+ 
       daysEl.textContent = pad(days);
       hoursEl.textContent = pad(hours);
       minutesEl.textContent = pad(minutes);
       secondsEl.textContent = pad(seconds);
     }
-
+ 
     tick();
     var interval = setInterval(tick, 1000);
-
+ 
     // Gently floating petals for a softer, more romantic backdrop
     var petalContainer = document.getElementById('petals');
     var petalCount = 14;
@@ -447,6 +448,8 @@
     }
   })();
 </script>
-
+ 
+<script data-goatcounter="https://abdelrhman.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+ 
 </body>
 </html>
