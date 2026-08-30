@@ -970,10 +970,9 @@
     }
  
     // ================= TEAM POLL =================
-    var POLL_NAMESPACE = 'abdelrhman-nareman-511-engagement';
-    var GROOM_KEY = 'team-groom';
-    var BRIDE_KEY = 'team-bride';
-    var API_BASE = 'https://api.countapi.xyz';
+    var GROOM_KEY = 'abdelrhman-nareman-511-team-groom';
+    var BRIDE_KEY = 'abdelrhman-nareman-511-team-bride';
+    var API_BASE = 'https://countapi.mileshilliard.com/api/v1';
  
     var groomBtn = document.getElementById('vote-groom');
     var brideBtn = document.getElementById('vote-bride');
@@ -1013,16 +1012,16 @@
  
     function fetchCounts(){
       return Promise.all([
-        fetch(API_BASE + '/get/' + POLL_NAMESPACE + '/' + GROOM_KEY).then(function(r){ return r.json(); }).catch(function(){ return { value: 0 }; }),
-        fetch(API_BASE + '/get/' + POLL_NAMESPACE + '/' + BRIDE_KEY).then(function(r){ return r.json(); }).catch(function(){ return { value: 0 }; })
+        fetch(API_BASE + '/get/' + GROOM_KEY).then(function(r){ return r.json(); }).catch(function(){ return { value: 0 }; }),
+        fetch(API_BASE + '/get/' + BRIDE_KEY).then(function(r){ return r.json(); }).catch(function(){ return { value: 0 }; })
       ]);
     }
  
     var storedVote = localStorage.getItem('and-n-poll-vote');
  
     fetchCounts().then(function(results){
-      var groomCount = (results[0] && results[0].value) || 0;
-      var brideCount = (results[1] && results[1].value) || 0;
+      var groomCount = Number((results[0] && results[0].value) || 0);
+      var brideCount = Number((results[1] && results[1].value) || 0);
       renderPoll(groomCount, brideCount, storedVote);
     }).catch(function(){
       pollNote.textContent = 'Poll is unavailable right now';
@@ -1035,15 +1034,15 @@
       brideBtn.disabled = true;
       pollNote.textContent = 'Casting your vote…';
  
-      fetch(API_BASE + '/hit/' + POLL_NAMESPACE + '/' + key)
+      fetch(API_BASE + '/hit/' + key)
         .then(function(r){ return r.json(); })
         .then(function(){
           localStorage.setItem('and-n-poll-vote', team);
           return fetchCounts();
         })
         .then(function(results){
-          var groomCount = (results[0] && results[0].value) || 0;
-          var brideCount = (results[1] && results[1].value) || 0;
+          var groomCount = Number((results[0] && results[0].value) || 0);
+          var brideCount = Number((results[1] && results[1].value) || 0);
           renderPoll(groomCount, brideCount, team);
         })
         .catch(function(){
