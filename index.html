@@ -598,15 +598,15 @@
     position:fixed;
     background:none;
     border:none;
-    padding: 11px;
+    padding: 12px;
     margin:0;
-    font-size: 13px;
+    font-size: 22px;
     line-height:1;
-    color: rgba(227,202,160,0.5);
+    color: rgba(230,206,164,0.75);
     cursor:pointer;
     z-index:40;
-    opacity:0.55;
-    filter: drop-shadow(0 0 3px rgba(227,202,160,0.35));
+    opacity:0.8;
+    filter: drop-shadow(0 0 6px rgba(230,206,164,0.6));
     animation: star-twinkle 4.5s ease-in-out infinite;
     transition: color 0.3s ease, transform 0.3s ease, opacity 0.3s ease;
     touch-action: manipulation;
@@ -618,11 +618,12 @@
     opacity:1;
     transform: scale(1.35);
     outline:none;
+    filter: drop-shadow(0 0 10px rgba(230,206,164,0.85));
   }
  
   @keyframes star-twinkle{
-    0%,100%{ opacity:0.3; transform:scale(1); }
-    50%{ opacity:0.7; transform:scale(1.15); }
+    0%,100%{ opacity:0.55; transform:scale(1); }
+    50%{ opacity:1; transform:scale(1.25); }
   }
  
   .star.collected{
