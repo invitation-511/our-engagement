@@ -433,6 +433,110 @@
     color: var(--gold);
   }
  
+  /* ================= TEAM POLL ================= */
+  .poll{
+    width: 100%;
+    max-width: 420px;
+    margin: 0 auto 3rem;
+    opacity:0;
+    animation: rise 1.1s ease forwards 1.35s;
+  }
+ 
+  .poll-label{
+    font-size: 0.7rem;
+    letter-spacing: 0.24em;
+    text-transform:uppercase;
+    color: var(--gold-soft);
+    margin-bottom: 1.1rem;
+    opacity:0.85;
+  }
+ 
+  .poll-options{
+    display:flex;
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+  }
+ 
+  .poll-btn{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap: 0.35rem;
+    padding: 0.9rem 0.6rem;
+    border-radius: 10px;
+    border: 1px solid rgba(201,161,90,0.4);
+    background: rgba(253,248,244,0.04);
+    color: var(--ivory);
+    cursor:pointer;
+    font-family:'Jost', sans-serif;
+    transition: transform 0.25s ease, box-shadow 0.3s ease, background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  }
+ 
+  .poll-btn:hover:not(:disabled){
+    transform: translateY(-2px);
+    background: rgba(253,248,244,0.09);
+  }
+ 
+  .poll-btn:disabled{ cursor:default; }
+ 
+  .poll-btn-text{
+    font-size: 0.76rem;
+    letter-spacing: 0.08em;
+    text-transform:uppercase;
+  }
+ 
+  .poll-btn-percent{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:600;
+    font-size: 1.5rem;
+  }
+ 
+  .poll-btn.selected.poll-groom{
+    background: linear-gradient(135deg, #7996ad, #4c6c88);
+    border-color: transparent;
+    color: #fdf8f4;
+    box-shadow: 0 8px 26px rgba(76,108,136,0.5);
+  }
+ 
+  .poll-btn.selected.poll-bride{
+    background: linear-gradient(135deg, #ffd7e4, #f3aec9);
+    border-color: transparent;
+    color: var(--burgundy-deep);
+    box-shadow: 0 8px 26px rgba(243,174,201,0.45);
+  }
+ 
+  .poll-bar{
+    display:flex;
+    width:100%;
+    height: 8px;
+    border-radius: 999px;
+    overflow:hidden;
+    background: rgba(253,248,244,0.08);
+  }
+ 
+  .poll-bar-groom{
+    height:100%;
+    width:50%;
+    background: linear-gradient(90deg, #4c6c88, #7996ad);
+    transition: width 0.7s ease;
+  }
+ 
+  .poll-bar-bride{
+    height:100%;
+    width:50%;
+    background: linear-gradient(90deg, #f3aec9, #ffd7e4);
+    transition: width 0.7s ease;
+  }
+ 
+  .poll-note{
+    margin-top: 0.8rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+    color: var(--blush);
+    opacity:0.7;
+  }
+ 
   /* ================= ACTION BUTTONS ================= */
   .actions{
     display:flex;
@@ -765,6 +869,25 @@
   </div>
   <p class="sub-date">A love that found its way home — come celebrate it with us</p>
  
+  <div class="poll" id="poll">
+    <p class="poll-label">Which team are you on?</p>
+    <div class="poll-options">
+      <button class="poll-btn poll-groom" id="vote-groom" type="button">
+        <span class="poll-btn-text">Team Groom</span>
+        <span class="poll-btn-percent" id="groom-percent">—</span>
+      </button>
+      <button class="poll-btn poll-bride" id="vote-bride" type="button">
+        <span class="poll-btn-text">Team Bride</span>
+        <span class="poll-btn-percent" id="bride-percent">—</span>
+      </button>
+    </div>
+    <div class="poll-bar">
+      <div class="poll-bar-groom" id="poll-bar-groom"></div>
+      <div class="poll-bar-bride" id="poll-bar-bride"></div>
+    </div>
+    <p class="poll-note" id="poll-note">Tap a team to cast your vote</p>
+  </div>
+ 
   <div class="actions">
     <a href="https://maps.app.goo.gl/DmN8zyVx5pWBJLag8" id="location-btn" class="btn btn-primary" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
@@ -845,6 +968,93 @@
       petal.style.transform = 'scale(' + scale + ')';
       petalContainer.appendChild(petal);
     }
+ 
+    // ================= TEAM POLL =================
+    var POLL_NAMESPACE = 'abdelrhman-nareman-511-engagement';
+    var GROOM_KEY = 'team-groom';
+    var BRIDE_KEY = 'team-bride';
+    var API_BASE = 'https://api.countapi.xyz';
+ 
+    var groomBtn = document.getElementById('vote-groom');
+    var brideBtn = document.getElementById('vote-bride');
+    var groomPercentEl = document.getElementById('groom-percent');
+    var bridePercentEl = document.getElementById('bride-percent');
+    var pollBarGroom = document.getElementById('poll-bar-groom');
+    var pollBarBride = document.getElementById('poll-bar-bride');
+    var pollNote = document.getElementById('poll-note');
+ 
+    function renderPoll(groomCount, brideCount, votedChoice){
+      var total = groomCount + brideCount;
+      var groomPct = total > 0 ? Math.round((groomCount / total) * 100) : 50;
+      var bridePct = total > 0 ? 100 - groomPct : 50;
+ 
+      groomPercentEl.textContent = total > 0 ? groomPct + '%' : '—';
+      bridePercentEl.textContent = total > 0 ? bridePct + '%' : '—';
+      pollBarGroom.style.width = groomPct + '%';
+      pollBarBride.style.width = bridePct + '%';
+ 
+      if(votedChoice === 'groom'){
+        groomBtn.classList.add('selected');
+        brideBtn.classList.remove('selected');
+        pollNote.textContent = 'Thanks for voting, Team Groom!';
+      } else if(votedChoice === 'bride'){
+        brideBtn.classList.add('selected');
+        groomBtn.classList.remove('selected');
+        pollNote.textContent = 'Thanks for voting, Team Bride!';
+      } else {
+        pollNote.textContent = 'Tap a team to cast your vote';
+      }
+ 
+      if(votedChoice){
+        groomBtn.disabled = true;
+        brideBtn.disabled = true;
+      }
+    }
+ 
+    function fetchCounts(){
+      return Promise.all([
+        fetch(API_BASE + '/get/' + POLL_NAMESPACE + '/' + GROOM_KEY).then(function(r){ return r.json(); }).catch(function(){ return { value: 0 }; }),
+        fetch(API_BASE + '/get/' + POLL_NAMESPACE + '/' + BRIDE_KEY).then(function(r){ return r.json(); }).catch(function(){ return { value: 0 }; })
+      ]);
+    }
+ 
+    var storedVote = localStorage.getItem('and-n-poll-vote');
+ 
+    fetchCounts().then(function(results){
+      var groomCount = (results[0] && results[0].value) || 0;
+      var brideCount = (results[1] && results[1].value) || 0;
+      renderPoll(groomCount, brideCount, storedVote);
+    }).catch(function(){
+      pollNote.textContent = 'Poll is unavailable right now';
+    });
+ 
+    function castVote(team){
+      if(localStorage.getItem('and-n-poll-vote')) return;
+      var key = team === 'groom' ? GROOM_KEY : BRIDE_KEY;
+      groomBtn.disabled = true;
+      brideBtn.disabled = true;
+      pollNote.textContent = 'Casting your vote…';
+ 
+      fetch(API_BASE + '/hit/' + POLL_NAMESPACE + '/' + key)
+        .then(function(r){ return r.json(); })
+        .then(function(){
+          localStorage.setItem('and-n-poll-vote', team);
+          return fetchCounts();
+        })
+        .then(function(results){
+          var groomCount = (results[0] && results[0].value) || 0;
+          var brideCount = (results[1] && results[1].value) || 0;
+          renderPoll(groomCount, brideCount, team);
+        })
+        .catch(function(){
+          pollNote.textContent = 'Could not cast vote — try again later';
+          groomBtn.disabled = !!localStorage.getItem('and-n-poll-vote');
+          brideBtn.disabled = !!localStorage.getItem('and-n-poll-vote');
+        });
+    }
+ 
+    groomBtn.addEventListener('click', function(){ castVote('groom'); });
+    brideBtn.addEventListener('click', function(){ castVote('bride'); });
  
     // ================= COLLECTIBLE STARS =================
     var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
